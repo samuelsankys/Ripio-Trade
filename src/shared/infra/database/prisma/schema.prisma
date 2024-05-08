@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id    String @id @default(uuid()) @db.Uuid
+  name  String
+  email String @unique @db.VarChar(50)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  bankAccounts       BankAccount[]
+  transactionHistory TransactionHistory[]
+}
+
+model BankAccount {
+  id             String  @id @default(uuid()) @db.Uuid
+  customerId     String  @db.Uuid
+  currentBalance Decimal
+  account        Decimal
+  accountDigit   Decimal
+  agency         Decimal
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  customer     Customer             @relation(fields: [customerId], references: [id])
+  transactions TransactionHistory[]
+}
+
+model TransactionHistory {
+  id            String   @id @default(uuid()) @db.Uuid
+  customerId    String   @db.Uuid
+  bankAccountId String   @db.Uuid
+  type          String
+  amount        Decimal?
+  beforeBalance Decimal?
+  afterBalance  Decimal?
+  status        String
+  transferId    String?
+  failingReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id])
+}
