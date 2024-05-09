@@ -8,11 +8,25 @@ import { PrismaService } from 'src/shared/infra/database/prisma/prisma-service.m
 export class PgBankAccountRepository implements IBankAccountRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(bankAccount: BankAccount): Promise<boolean> {
+  async findById(id: string): Promise<BankAccount> {
+    const result = await this.prisma.bankAccount.findUnique({
+      where: { id },
+    });
+    return result ? BankAccountMapper.toDomain(result) : null;
+  }
+
+  async exists(email: string): Promise<boolean> {
+    const result = await this.prisma.bankAccount.findUnique({
+      where: { email },
+    });
+    return !!result;
+  }
+
+  async create(bankAccount: BankAccount): Promise<BankAccount | null> {
     const data = BankAccountMapper.toPersistence(bankAccount);
     const result = await this.prisma.bankAccount.create({
       data,
     });
-    return !!result;
+    return !!result ? BankAccountMapper.toDomain(result) : null;
   }
 }

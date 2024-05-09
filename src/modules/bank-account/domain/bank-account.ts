@@ -1,18 +1,23 @@
 import { Entity } from 'src/shared/application/domain/entity';
 
 interface BankAccountProps {
-  customerId: string;
+  name: string;
+  email: string;
   agency: number;
   account: number;
   accountDigit: number;
-  currentBalance: number;
+  currentBalance?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export class BankAccount extends Entity<BankAccountProps> {
-  get customerId(): string {
-    return this.props.customerId;
+  get name(): string {
+    return this.props.name;
+  }
+
+  get email(): string {
+    return this.props.email;
   }
 
   get agency(): number {
@@ -47,6 +52,7 @@ export class BankAccount extends Entity<BankAccountProps> {
     const bankAccount = new BankAccount(
       {
         ...props,
+        agency: props.agency ?? 1,
         currentBalance: props.currentBalance ?? 0,
         updatedAt: props.updatedAt ?? new Date(),
         createdAt: props.createdAt ?? new Date(),
