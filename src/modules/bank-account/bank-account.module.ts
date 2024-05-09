@@ -18,5 +18,6 @@ import { GetAccountBalanceUseCase } from './use-cases/get-account-balance/get-ac
       useClass: PgBankAccountRepository,
     },
   ],
+  exports: [IBankAccountRepository],
 })
 export class BankAccountModule {}
