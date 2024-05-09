@@ -1,4 +1,6 @@
 import { Entity } from 'src/shared/application/domain/entity';
+import { Either, left, right } from 'src/shared/application/either';
+import { InsufficientFunds } from './error/bank-account.errors';
 
 interface BankAccountProps {
   name: string;
@@ -12,6 +14,9 @@ interface BankAccountProps {
 }
 
 export class BankAccount extends Entity<BankAccountProps> {
+  private beforeOperationBalance: number | undefined;
+  private afterOperationBalance: number | undefined;
+
   get name(): string {
     return this.props.name;
   }
@@ -61,5 +66,32 @@ export class BankAccount extends Entity<BankAccountProps> {
     );
 
     return bankAccount;
+  }
+
+  public deposit(value: number) {
+    this.beforeOperationBalance = this.props.currentBalance;
+    this.props.currentBalance += value;
+    this.afterOperationBalance = this.props.currentBalance;
+  }
+
+  public withdrawal(value: number): Either<InsufficientFunds, boolean> {
+    if (value > this.props.currentBalance) return left(new InsufficientFunds());
+    this.beforeOperationBalance = this.props.currentBalance;
+    this.props.currentBalance -= value;
+    this.afterOperationBalance = this.props.currentBalance;
+
+    return right(true);
+  }
+
+  public getBalance() {
+    return this.props.currentBalance;
+  }
+
+  public getBeforeOperationBalance() {
+    return this.beforeOperationBalance;
+  }
+
+  public getAfterOperationBalance() {
+    return this.afterOperationBalance;
   }
 }

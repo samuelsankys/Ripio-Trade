@@ -4,6 +4,7 @@ import {
   ConflictException,
   Controller,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateBankAccountUseCase } from './create-bank-account.usecase';
 import { CreateBankAccountErrors } from './create-bank-account.errors';
@@ -14,7 +15,7 @@ export class CreateBankAccountController {
   constructor(private readonly usecase: CreateBankAccountUseCase) {}
 
   @Post()
-  async create(@Body() dto: CreateBankAccountDTO) {
+  async create(@Body(new ValidationPipe()) dto: CreateBankAccountDTO) {
     const result = await this.usecase.execute(dto);
     if (result.isLeft()) {
       const error = result.value;
