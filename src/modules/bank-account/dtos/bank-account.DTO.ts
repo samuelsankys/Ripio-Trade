@@ -1,10 +1,11 @@
 export interface BankAccountDTO {
   id: string;
-  customerId: string;
+  name: string;
+  email: string;
   agency: number;
   account: number;
   accountDigit: number;
-  currentBalance: number;
-  createdAt: Date;
-  updatedAt: Date;
+  currentBalance?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

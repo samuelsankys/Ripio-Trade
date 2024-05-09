@@ -1,5 +1,7 @@
 import { BankAccount } from '../domain/bank-account';
 
-export interface IBankAccountRepository {
-  create(bankAccount: BankAccount): Promise<boolean>;
+export abstract class IBankAccountRepository {
+  abstract exists(email: string): Promise<boolean>;
+  abstract findById(id: string): Promise<BankAccount>;
+  abstract create(bankAccount: BankAccount): Promise<BankAccount | null>;
 }
