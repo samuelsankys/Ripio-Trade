@@ -1,11 +1,20 @@
 import { Controller, Get, Param, Query, ValidationPipe } from '@nestjs/common';
 import { AccountStatementUseCase } from './account-statement.usecase';
-import { AccountStatementDTO } from './account-statement.DTO';
+import {
+  AccountStatementDTO,
+  AccountStatementDTOResponse,
+} from './account-statement.DTO';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Transaction')
 @Controller('transaction')
 export class AccountStatementController {
   constructor(private readonly usecase: AccountStatementUseCase) {}
 
+  @ApiOkResponse({
+    description: 'Search Statement',
+    type: AccountStatementDTOResponse,
+  })
   @Get(':bankAccountId/statement')
   async create(
     @Param('bankAccountId') bankAccountId: string,

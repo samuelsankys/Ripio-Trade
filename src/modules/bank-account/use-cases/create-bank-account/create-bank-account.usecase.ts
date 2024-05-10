@@ -5,10 +5,11 @@ import { CreateBankAccountDTO } from './create-bank-account.DTO';
 import { BankAccount } from '../../domain/bank-account';
 import { IBankAccountRepository } from '../../repositories/bank-account-repository.interface';
 import { BankAccountMapper } from '../../mappers/bank-account.map';
+import { BankAccountDTO } from '../../dtos/bank-account.DTO';
 
 export type CreateBankAccountResponse = Either<
   CreateBankAccountErrors.BankAccountAlreadyExistsError | Error,
-  CreateBankAccountDTO
+  BankAccountDTO
 >;
 
 @Injectable()

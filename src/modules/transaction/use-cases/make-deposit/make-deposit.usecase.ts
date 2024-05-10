@@ -29,7 +29,8 @@ export class MakeDepositUseCase {
 
     if (!accountExists)
       return left(new MakeDepositErrors.BankAccountNotExistsError());
-    accountExists.deposit(request.value);
+    const depositOrError = accountExists.deposit(request.value);
+    if (depositOrError.isLeft()) return left(depositOrError.value);
 
     const transaction = Transaction.create({
       bankAccountId: request.bankAccountId,

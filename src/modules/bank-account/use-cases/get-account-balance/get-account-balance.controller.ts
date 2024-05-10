@@ -6,13 +6,22 @@ import {
   Param,
 } from '@nestjs/common';
 import { GetAccountBalanceUseCase } from './get-account-balance.usecase';
-import { GetAccountBalanceDTO } from './get-account-balance.DTO';
+import {
+  GetAccountBalanceDTO,
+  GetAccountBalanceDTOResponse,
+} from './get-account-balance.DTO';
 import { GetAccountBalanceErrors } from './get-account-balance.errors';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Bank Account')
 @Controller('bank-account')
 export class GetAccountBalanceController {
   constructor(private readonly usecase: GetAccountBalanceUseCase) {}
 
+  @ApiOkResponse({
+    description: 'Get Balance account',
+    type: GetAccountBalanceDTOResponse,
+  })
   @Get(':bankAccountId/balance')
   async getAccountBalance(@Param() dto: GetAccountBalanceDTO) {
     const result = await this.usecase.execute(dto);

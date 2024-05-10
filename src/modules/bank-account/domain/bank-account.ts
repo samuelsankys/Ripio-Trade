@@ -68,19 +68,18 @@ export class BankAccount extends Entity<BankAccountProps> {
     return bankAccount;
   }
 
-  public deposit(
-    value: number,
-  ): Either<InsufficientFunds | AmountUnder1, boolean> {
-    if (value < 1) return left(new AmountUnder1());
+  public deposit(value: number): Either<AmountUnder1, boolean> {
+    if (value < 0.1) return left(new AmountUnder1());
     this.beforeOperationBalance = this.props.currentBalance;
     this.props.currentBalance += value;
     this.afterOperationBalance = this.props.currentBalance;
+    return right(true);
   }
 
   public withdrawal(
     value: number,
   ): Either<InsufficientFunds | AmountUnder1, boolean> {
-    if (value < 1) return left(new AmountUnder1());
+    if (value < 0.1) return left(new AmountUnder1());
     if (value > this.props.currentBalance) return left(new InsufficientFunds());
     this.beforeOperationBalance = this.props.currentBalance;
     this.props.currentBalance -= value;
