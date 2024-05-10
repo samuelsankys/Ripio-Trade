@@ -5,3 +5,9 @@ export class InsufficientFunds extends DomainError {
     super('Insufficient funds');
   }
 }
+
+export class AmountUnder1 extends DomainError {
+  constructor() {
+    super('Can not withdraw less than 1.');
+  }
+}

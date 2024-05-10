@@ -4,6 +4,7 @@ import {
   Controller,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { MakeDepositUseCase } from './make-deposit.usecase';
@@ -16,7 +17,7 @@ export class MakeDepositController {
 
   @Post(':bankAccountId/deposit')
   async create(
-    @Param('bankAccountId') bankAccountId: string,
+    @Param('bankAccountId', ParseUUIDPipe) bankAccountId: string,
     @Body() { value }: { value: number },
   ) {
     const dto: MakeDepositDTO = { bankAccountId, value };
