@@ -41,6 +41,14 @@ describe('BankAccount - Domain', () => {
     expect(result.value).toBeInstanceOf(AmountUnder1);
   });
 
+  it('should left throw deposit zero number', () => {
+    const result = bankAccount.deposit(0);
+    console.log({ result });
+
+    expect(result.isRight()).toBe(false);
+    expect(result.value).toBeInstanceOf(AmountUnder1);
+  });
+
   it('should left throw AmountUnder1 error deposit negative number', () => {
     const result = bankAccount.deposit(-4);
 
