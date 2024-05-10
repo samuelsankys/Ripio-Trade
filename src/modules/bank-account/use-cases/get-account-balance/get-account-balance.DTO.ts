@@ -1,7 +1,11 @@
-export interface GetAccountBalanceDTO {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class GetAccountBalanceDTO {
+  @ApiProperty()
   bankAccountId: string;
 }
 
-export interface GetAccountBalanceDTOResponse {
+export class GetAccountBalanceDTOResponse {
+  @ApiProperty()
   currentBalance: number;
 }

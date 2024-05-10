@@ -5,21 +5,29 @@ import {
   NotFoundException,
   Param,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TransferUseCase } from './transfer.usecase';
-import { TransferDTO } from './transfer.DTO';
+import { TransferDTO, TransferInputValue } from './transfer.DTO';
 import { TransferErrors } from './transfer.errors';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { TransactionHistoryDTO } from '../../dtos/transaction.DTO';
 
+@ApiTags('Transaction')
 @Controller('transaction')
 export class TransferController {
   constructor(private readonly usecase: TransferUseCase) {}
 
+  @ApiCreatedResponse({
+    description: 'Make transfer',
+    type: TransactionHistoryDTO,
+  })
   @Post(':bankAccountId/transfer')
   async create(
     @Param('bankAccountId') bankAccountId: string,
-    @Body() { value, toEmail }: { value: number; toEmail: string },
+    @Body(new ValidationPipe()) input: TransferInputValue,
   ) {
-    const dto: TransferDTO = { bankAccountId, value, toEmail };
+    const dto: TransferDTO = { bankAccountId, ...input };
     const result = await this.usecase.execute(dto);
     if (result.isLeft()) {
       const error = result.value;
