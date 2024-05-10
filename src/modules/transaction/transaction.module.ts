@@ -9,6 +9,8 @@ import { MakeWithDrawalController } from './use-cases/make-withdrawal/make-withd
 import { MakeWithDrawalUseCase } from './use-cases/make-withdrawal/make-withdrawal.usecase';
 import { TransferUseCase } from './use-cases/transfer/transfer.usecase';
 import { TransferController } from './use-cases/transfer/transfer.controller';
+import { AccountStatementUseCase } from './use-cases/account-statement/account-statement.usecase';
+import { AccountStatementController } from './use-cases/account-statement/account-statement.controller';
 
 @Module({
   imports: [BankAccountModule],
@@ -16,12 +18,14 @@ import { TransferController } from './use-cases/transfer/transfer.controller';
     MakeDepositController,
     MakeWithDrawalController,
     TransferController,
+    AccountStatementController,
   ],
   providers: [
     PrismaService,
     MakeDepositUseCase,
     MakeWithDrawalUseCase,
     TransferUseCase,
+    AccountStatementUseCase,
     {
       provide: ITransactionRepository,
       useClass: PgTransactionRepository,

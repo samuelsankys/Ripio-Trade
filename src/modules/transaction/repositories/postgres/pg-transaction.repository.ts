@@ -3,11 +3,53 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/shared/infra/database/prisma/prisma-service.module';
 import { TransactionMapper } from '../../mappers/transaction.map';
 import { Transaction } from '../../domain/transaction';
-import { ITransactionRepository } from '../transaction-repository.interface';
+import {
+  ITransactionRepository,
+  TransactionFilterOptions,
+} from '../transaction-repository.interface';
 
 @Injectable()
 export class PgTransactionRepository implements ITransactionRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async filter(
+    bankAccountId: string,
+    options: TransactionFilterOptions,
+  ): Promise<Transaction[]> {
+    const { fromDate, toDate, pageSize, pageNumber } = options;
+    const where: any = {
+      bankAccountId,
+      createdAt: {
+        gte: fromDate,
+        lte: toDate,
+      },
+    };
+    const skip = (pageNumber - 1) * pageSize;
+
+    const result = await this.prisma.transactionHistory.findMany({
+      where,
+      take: pageSize,
+      skip,
+    });
+
+    return result.map((t) => TransactionMapper.toDomain(t));
+  }
+
+  async filterCount(
+    bankAccountId: string,
+    options: TransactionFilterOptions,
+  ): Promise<number> {
+    const { fromDate, toDate } = options;
+    const where: any = {
+      bankAccountId,
+      createdAt: {
+        gte: fromDate,
+        lte: toDate,
+      },
+    };
+    const count = await this.prisma.transactionHistory.count({ where });
+    return count;
+  }
 
   async create(transaction: Transaction): Promise<Transaction> {
     const data = TransactionMapper.toPersistence(transaction);
