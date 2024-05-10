@@ -1,13 +1,14 @@
 import { Entity } from 'src/shared/application/domain/entity';
+import { TransactionStatusEnum } from './transaction-status';
+import { TransactionTypeEnum } from './transaction-type';
 
 interface TransactionProps {
-  customerId: string;
   bankAccountId: string;
-  type: string;
+  type: TransactionTypeEnum;
   amount?: number;
   beforeBalance?: number;
   afterBalance?: number;
-  status: string;
+  status: TransactionStatusEnum;
   transferId?: string;
   failingReason?: string;
   createdAt?: Date;
@@ -15,15 +16,11 @@ interface TransactionProps {
 }
 
 export class Transaction extends Entity<TransactionProps> {
-  get customerId(): string {
-    return this.props.customerId;
-  }
-
   get bankAccountId(): string {
     return this.props.bankAccountId;
   }
 
-  get type(): string {
+  get type(): TransactionTypeEnum {
     return this.props.type;
   }
 
@@ -39,7 +36,7 @@ export class Transaction extends Entity<TransactionProps> {
     return this.props.afterBalance;
   }
 
-  get status(): string {
+  get status(): TransactionStatusEnum {
     return this.props.status;
   }
 
@@ -67,6 +64,7 @@ export class Transaction extends Entity<TransactionProps> {
     const transaction = new Transaction(
       {
         ...props,
+        status: props.status ?? TransactionStatusEnum.PENDING,
         updatedAt: props.updatedAt ?? new Date(),
         createdAt: props.createdAt ?? new Date(),
       },

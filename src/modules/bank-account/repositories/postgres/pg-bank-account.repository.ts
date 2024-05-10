@@ -15,11 +15,20 @@ export class PgBankAccountRepository implements IBankAccountRepository {
     return result ? BankAccountMapper.toDomain(result) : null;
   }
 
-  async exists(email: string): Promise<boolean> {
+  async exists(email: string): Promise<BankAccount> {
     const result = await this.prisma.bankAccount.findUnique({
       where: { email },
     });
-    return !!result;
+    return result ? BankAccountMapper.toDomain(result) : null;
+  }
+
+  async update(bankAccount: BankAccount): Promise<BankAccount | null> {
+    const data = BankAccountMapper.toPersistence(bankAccount);
+    const result = await this.prisma.bankAccount.update({
+      data,
+      where: { id: data.id },
+    });
+    return !!result ? BankAccountMapper.toDomain(result) : null;
   }
 
   async create(bankAccount: BankAccount): Promise<BankAccount | null> {

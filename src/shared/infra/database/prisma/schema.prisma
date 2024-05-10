@@ -17,7 +17,7 @@ model BankAccount {
   id             String  @id @default(uuid()) @db.Uuid
   name           String
   email          String  @unique @db.VarChar(50)
-  currentBalance Decimal
+  currentBalance Decimal @db.Decimal(15, 2)
   account        Decimal
   accountDigit   Decimal
   agency         Decimal
@@ -32,9 +32,9 @@ model TransactionHistory {
   id            String   @id @default(uuid()) @db.Uuid
   bankAccountId String   @db.Uuid
   type          String
-  amount        Decimal?
-  beforeBalance Decimal?
-  afterBalance  Decimal?
+  amount        Decimal? @db.Decimal(15, 2)
+  beforeBalance Decimal? @db.Decimal(15, 2)
+  afterBalance  Decimal? @db.Decimal(15, 2)
   status        String
   transferId    String?
   failingReason String?

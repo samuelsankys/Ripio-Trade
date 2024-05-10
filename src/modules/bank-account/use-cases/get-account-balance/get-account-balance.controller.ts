@@ -13,7 +13,7 @@ import { GetAccountBalanceErrors } from './get-account-balance.errors';
 export class GetAccountBalanceController {
   constructor(private readonly usecase: GetAccountBalanceUseCase) {}
 
-  @Get(':bankAccountId')
+  @Get(':bankAccountId/balance')
   async getAccountBalance(@Param() dto: GetAccountBalanceDTO) {
     const result = await this.usecase.execute(dto);
     if (result.isLeft()) {

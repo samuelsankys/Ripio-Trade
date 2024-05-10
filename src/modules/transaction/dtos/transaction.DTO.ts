@@ -1,6 +1,5 @@
-export interface BankAccountDTO {
+export interface TransactionHistoryDTO {
   id: string;
-  customerId: string;
   bankAccountId: string;
   type: string;
   amount?: number;
